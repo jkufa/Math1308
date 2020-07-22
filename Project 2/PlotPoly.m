@@ -27,18 +27,18 @@ for i=1:size(N)
         H = [H,X.^idx];
     end
     A_star = inv(H'*H)*H'*Y;
-    Y_tilde = H*A_star;
+    b = H*A_star;
     
     % Compute Least Squares Error
     for j = 1:size(X)
 %      disp("error = " + sum + " + (" + Y_tilde(j,1) + " - " + Y(j,1) + ")^2")
-        sum = sum + (Y_tilde(j,1)-Y(j,1))^2; % Sum of Residuals
+        sum = sum + (b(j,1)-Y(j,1))^2; % Sum of Residuals
     end
     error = sqrt(sum); % LSE
     disp("Least Squares Error for N = " + N(i,1) + ": " + error)
     
-    plot(X,Y_tilde,'LineWidth',2)
-    % disp(Y_tilde)
+    plot(X,b,'LineWidth',2)
+    disp(b)
 end
 
 hold off
