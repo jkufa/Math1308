@@ -16,9 +16,9 @@ lgd = legend('Initial Data Points'); grid on; hold on;
 
 % For each degree, calculate Least Squares Fit
 for i=1:size(n)
-    % Vars that need to reset
-    A = [];
-    A2 = [];
+    % Vars that need to reset\
+    A = []; % for polyfit
+    A2 = []; % for trig fit
     
     % For polyfit, we need to find A for Ax*=b
     % A's dimensions are determined by the degree
@@ -31,11 +31,11 @@ for i=1:size(n)
     
     % Now find x* and b.
     % Use row reduction in case of inconsistent data
-    % polyfit coefficients
+    % Polyfit coefficients
     xStar = rref([A'*A A'*y]); 
     xStar = xStar(:,end);
-    % trigfit coefficients
-    x2Star = rref([A2'*A A2'*y]);
+    % Trigfit coefficients
+    x2Star = rref([A2'*A2 A2'*y]);
     x2Star = x2Star(:,end);
     
     % Grab new y matrix
