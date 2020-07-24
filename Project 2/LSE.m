@@ -6,8 +6,8 @@ T = dlmread('data.txt');
 x = T(1,1:10); x=x';
 y = T(2,1:10); y = y';
 % given degrees
-% n = [3; 5; 6];
-n = [3];
+n = [3; 5; 6];
+% n = [3];
 
 % Plot Initial points
 fig = figure("Name","Project 2","NumberTitle","off",'Renderer', 'painters', 'Position', [10 10 1200 675]);
