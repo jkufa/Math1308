@@ -6,7 +6,8 @@ T = dlmread('data.txt');
 x = T(1,1:10); x=x';
 y = T(2,1:10); y = y';
 % given degrees
-n = [3; 5; 6];
+% n = [3; 5; 6];
+n = [3];
 
 % Plot Initial points
 fig = figure("Name","Project 2","NumberTitle","off",'Renderer', 'painters', 'Position', [10 10 1200 675]);
@@ -16,23 +17,30 @@ lgd = legend('Initial Data Points'); grid on; hold on;
 % For each degree, calculate Least Squares Fit
 for i=1:size(n)
     % Vars that need to reset
-    b2 = 0;
     A = [];
+    A2 = [];
     
     % For polyfit, we need to find A for Ax*=b
     % A's dimensions are determined by the degree
     for idx=0:n(i,1)
         A = [A,x.^idx];
+        if idx ~= 0
+            A2 = [A2,sin(x*idx)];
+        end
     end
     
     % Now find x* and b.
-    xStar = (A'*A)\(A'*y); % use mldivide because it is more accurate than inverting
-    b = A*xStar; % coefficients for both sets of linear equations
+    % Use row reduction in case of inconsistent data
+    % polyfit coefficients
+    xStar = rref([A'*A A'*y]); 
+    xStar = xStar(:,end);
+    % trigfit coefficients
+    x2Star = rref([A2'*A A2'*y]);
+    x2Star = x2Star(:,end);
     
-    % For trigfit, we need coefficients x*, degree, and x value
-    for(j=size(xStar,1))
-        b2 = b2 + xStar(j,1)*sin(j*x); 
-    end
+    % Grab new y matrix
+    b = A*xStar;
+    b2 = A2*x2Star;
     
     % Calculate error
     e1 = sqrt(sum(abs(b-y).^2/size(x,1)));  % Poly
